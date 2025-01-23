@@ -1,20 +1,19 @@
-// app/page.js
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import Navbar from '@/components/Navbar';
-import Link from 'next/link';
+import BlogCard from "../components/BlogCard";
 
 export default async function Home() {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
-
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+  const blogs = await res.json();
+  // console.log(blogs);
   return (
-    <div className="container grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <header>
-        <Navbar user={user} />  {/* Navbar কম্পোনেন্টে user প্রপ্স পাঠানো হচ্ছে */}
-      </header>
-      <div className="mt-20">
-        <h1 className="text-4xl">Welcome to the Home Page</h1>
-        <p>This is the homepage where you can navigate to different sections.</p>
+    <div>
+      <h2 className="text-2xl text-center py-6">Blog Posts - {blogs.length}</h2>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {
+          blogs.map(blog => <BlogCard
+            key={blog.id}
+            blog={blog}
+          ></BlogCard>)
+        }
       </div>
     </div>
   );
